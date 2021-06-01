@@ -1,12 +1,16 @@
-const mongoose = require("mongoose");
+require('dotenv').config()
+const mongoose = require('mongoose');
 
-if (!process.env.MONGODB_URI) {
-  throw Error(`
-    No environment variable set for MONGODB_URI
-    Please set one in order to be able to connect
-    to your database
-  `);
-}
+// if (!process.env.MONGODB_URI) {
+//   throw Error(`
+//     No environment variable set for MONGODB_URI
+//     Please set one in order to be able to connect
+//     to your database
+//   `);
+// }
+
+
+// mongodb://localhost/scoby
 
 mongoose
   .connect(process.env.MONGODB_URI, {
