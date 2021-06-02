@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const Item = require('../models/Item');
-const { createIndexes } = require('../models/User');
 
 // Prefixe : api/users/
 
@@ -44,26 +43,12 @@ router.get('/me', (req, res) => {
 
 // Si match => rends moi cet item
 
-router.get('/me/items', (req, res) => {
-  User.findById(req.session.currentUser).then((currentUser) => {
-    console.log('log current User >>>   ' + currentUser._id); // 3è
-  });
-  console.log('log req.session >>>>>>    ' + req.session.currentUser); // Premier
-  Item.find()
-    .then((documentUser) => {
-      const userItems = documentUser.map((itemUser) => {
-        return itemUser.creator;
-      });
-      console.log('This is the result      ' + userItems); // 2è
+router.get('/me/items', (req, res, next) => {
 
-      if (userItems === req.session.currentUser) {
-        console.log('You rock !');
-      }
-      res.status(200).json(documentUser);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ message: 'Cannot find The User' });
+    Item.find({creator: req.session.currentUser}).then((infos) => {
+      res.status(200).json(infos);
+    }).catch((err) => {
+     next(err)
     });
 });
 
