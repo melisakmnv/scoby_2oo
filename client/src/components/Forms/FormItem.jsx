@@ -2,17 +2,35 @@ import React, { Component } from "react";
 import LocationAutoComplete from "../LocationAutoComplete";
 import Button from "../Base/Button";
 import "../../styles/form.css";
+import axios from "axios";
 
 class ItemForm extends Component {
   state = {};
 
-  handleChange(event) {
+  handleChange = (event) => {
     console.log("Wax On Wax Off");
-    this.setState({});
+    this.setState({
+      [event.target.name]: event.target.value
+    });
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
+    const newItem = {
+      name: this.state.name,
+      category: this.state.category,
+      quantity: this.state.quantity,
+      location: this.state.location,
+      description: this.state.description,
+      image: this.state.image,
+      contact: this.state.contact,
+    };
+    axios.post("http://localhost:4444/api/items", newItem).then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
     console.log("Wax On Wax Off");
 
     // In order to send back the data to the client, since there is an input type file you have to send the
@@ -33,7 +51,7 @@ class ItemForm extends Component {
   render() {
     return (
       <div className="ItemForm-container">
-        <form className="form">
+        <form onSubmit={this.handleSubmit} className="form">
           <h2 className="title">Add Item</h2>
 
           <div className="form-group">
@@ -41,9 +59,11 @@ class ItemForm extends Component {
               Name
             </label>
             <input
+              name="name"
               id="name"
               className="input"
               type="text"
+              value={this.state.name}
               onChange={this.handleChange}
               placeholder="What are you giving away ?"
             />
@@ -54,7 +74,7 @@ class ItemForm extends Component {
               Category
             </label>
 
-            <select id="category" defaultValue="-1">
+            <select id="category" name="category" defaultValue="-1">
               <option value="-1" disabled>
                 Select a category
               </option>
@@ -69,7 +89,7 @@ class ItemForm extends Component {
             <label className="label" htmlFor="quantity">
               Quantity
             </label>
-            <input className="input" id="quantity" type="number" />
+            <input name="quantity" value={this.state.quantity} className="input" id="quantity" type="number" onChange={this.handleChange} />
           </div>
 
           <div className="form-group">
@@ -84,9 +104,12 @@ class ItemForm extends Component {
               Description
             </label>
             <textarea
+              name="description"
               id="description"
               className="text-area"
               placeholder="Tell us something about this item"
+              value={this.state.description}
+              onChange={this.handleChange}
             ></textarea>
           </div>
 
@@ -94,7 +117,7 @@ class ItemForm extends Component {
             <label className="custom-upload label" htmlFor="image">
               Upload image
             </label>
-            <input className="input" id="image" type="file" />
+            <input name="image" className="input" id="image" type="file" />
           </div>
 
           <h2>Contact information</h2>
@@ -104,10 +127,10 @@ class ItemForm extends Component {
               How do you want to be reached?
             </label>
             <div>
-              <input type="radio" />
+              <input name="contact" type="text" value={this.state.email} onChange={this.handleChange} />
               user email
             </div>
-            <input type="radio" />
+            <input name="contact" type="text" value={this.state.phoneNumber} onChange={this.handleChange}/>
             contact phone number
           </div>
 
