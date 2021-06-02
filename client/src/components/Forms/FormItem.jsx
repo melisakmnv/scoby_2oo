@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import LocationAutoComplete from "../LocationAutoComplete";
+import { withUser } from "../../components/Auth/withUser";
+import { AuthContext } from "../Auth/AuthProvider";
 import Button from "../Base/Button";
 import "../../styles/form.css";
 import axios from "axios";
+
 
 class ItemForm extends Component {
   state = {};
@@ -127,11 +130,11 @@ class ItemForm extends Component {
               How do you want to be reached?
             </label>
             <div>
-              <input name="contact" type="text" value={this.state.email} onChange={this.handleChange} />
-              user email
+              <input name="contact" type="checkbox" value={this.state.email} onChange={this.handleChange} />
+              {this.email}
             </div>
-            <input name="contact" type="text" value={this.state.phoneNumber} onChange={this.handleChange}/>
-            contact phone number
+            <input name="contact" type="checkbox" value={this.state.phoneNumber} onChange={this.handleChange}/>
+            {this.phoneNumber} 
           </div>
 
           <p className="message">
@@ -147,4 +150,4 @@ class ItemForm extends Component {
   }
 }
 
-export default ItemForm;
+export default withUser(ItemForm);
