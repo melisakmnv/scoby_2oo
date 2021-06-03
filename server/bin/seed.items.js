@@ -50,6 +50,7 @@ const items = [
     creator: "60b63d8852b7e925f12a0ac4",
     contact: 'email',
   },
+  
 ];
 
 async function insertItems() {
